@@ -24,6 +24,9 @@ urlpatterns = [
     url(r'^ipa-store/(?P<ipa_id>[0-9]+)/download/$',
         'ipastoreweb.views.download',
         name='download'),
+    url(r'^ipa-store/(?P<ipa_id>[0-9]+)/delete/$',
+        'ipastoreweb.views.delete',
+        name='delete'),
     url(r'^ipa-store/new/$', 'ipastoreweb.views.upload', name='upload'),
 
     # admin url patterns
