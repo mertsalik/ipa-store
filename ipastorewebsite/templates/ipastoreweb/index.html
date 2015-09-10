@@ -1,0 +1,9 @@
+{% if latest_ipa_list %}
+    <ul>
+    {% for ipa in latest_ipa_list %}
+        <li><a href="/ipa-store/{{ ipa.id }}/">{{ ipa.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No apps are available.</p>
+{% endif %}

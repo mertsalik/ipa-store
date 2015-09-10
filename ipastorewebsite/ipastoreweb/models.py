@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Ipa(models.Model):
-    id = models.IntegerField('Identifier',primary_key=True)
+    id = models.IntegerField('Identifier', primary_key=True)
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
     app_version = models.CharField(max_length=20)
