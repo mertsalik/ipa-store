@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, render_to_response
+from django.http import HttpResponse, HttpResponseRedirect
 from django.http import Http404
 from models import Ipa
+from forms import IpaUploadForm
 
 
 # Create your views here.
@@ -23,3 +24,16 @@ def detail(request, ipa_id):
 def download(request, ipa_id):
     response = "You're looking at the results of ipa %s."
     return HttpResponse(response % ipa_id)
+
+
+def upload(request):
+    if request.method == 'POST':
+        form = IpaUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            return HttpResponse("Valid Form")
+        else:
+            context = {'form': form}
+            return render_to_response('ipastoreweb/upload.html', context)
+    else:
+        context = {'form': IpaUploadForm()}
+        return render(request, 'ipastoreweb/upload.html', context)
