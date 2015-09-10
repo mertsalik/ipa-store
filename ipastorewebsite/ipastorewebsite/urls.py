@@ -13,10 +13,18 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url, patterns
+from django.conf.urls import include, url
 from django.contrib import admin
 
-urlpatterns = patterns('',
-                       url(r'^ipa-store/$', include('ipastoreweb.urls')),
-                       url(r'^admin/', include(admin.site.urls)),
-                       )
+urlpatterns = [
+    # ipastoreweb url patterns
+    url(r'^ipa-store/$', 'ipastoreweb.views.index', name='index'),
+    url(r'^ipa-store/(?P<ipa_id>[0-9]+)/$', 'ipastoreweb.views.detail',
+        name='detail'),
+    url(r'^ipa-store/(?P<ipa_id>[0-9]+)/download/$',
+        'ipastoreweb.views.download',
+        name='download'),
+
+    # admin url patterns
+    url(r'^admin/', include(admin.site.urls)),
+]
