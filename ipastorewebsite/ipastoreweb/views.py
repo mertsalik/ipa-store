@@ -8,7 +8,8 @@ from models import Ipa
 from forms import IpaUploadForm
 import os
 import uuid
-import datetime
+from helpers.ipa import IpaReader
+import traceback
 
 IPA_FOLDER = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static")
@@ -46,10 +47,15 @@ def upload(request):
         if form.is_valid():
             try:
                 ipa_path = handle_uploaded_file(request.FILES['attached_file'])
+                reader = IpaReader(ipa_path, form.cleaned_data['name'])
+                prop = reader.get_ipa_properties()
                 ipa_model = form.save(commit=False)
                 ipa_model.file_path = ipa_path
+                ipa_model.name = prop['name']
+                ipa_model.app_version = prop['app_version']
                 ipa_model.save()
             except Exception as e:
+                traceback.print_exc()
                 return HttpResponseServerError(
                     "An error occured while saving ipa file")
 
