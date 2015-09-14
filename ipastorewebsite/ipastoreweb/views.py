@@ -8,7 +8,7 @@ from models import Ipa
 from forms import IpaUploadForm
 import os
 import uuid
-from helpers.ipa import IpaReader
+from helpers.ipa import IpaReader, PlistWriter
 import traceback
 
 IPA_FOLDER = os.path.join(
@@ -28,7 +28,11 @@ def detail(request, ipa_id):
         ipa = Ipa.objects.get(pk=ipa_id)
     except Ipa.DoesNotExist:
         raise Http404("Question does not exist")
-    return render(request, 'ipastoreweb/detail.html', {'ipa': ipa})
+    head, ipa_filename = os.path.split(ipa.file_path)
+    ipa_url = "{}/static/{}.plist".format(request.build_absolute_uri('/')[:-1],
+                                          ipa_filename)
+    return render(request, 'ipastoreweb/detail.html',
+                  {'ipa': ipa, 'ipa_url': ipa_url})
 
 
 def download(request, ipa_id):
@@ -47,13 +51,23 @@ def upload(request):
         if form.is_valid():
             try:
                 ipa_path = handle_uploaded_file(request.FILES['attached_file'])
-                reader = IpaReader(ipa_path, form.cleaned_data['name'])
+                reader = IpaReader(ipa_path)
                 prop = reader.get_ipa_properties()
                 ipa_model = form.save(commit=False)
                 ipa_model.file_path = ipa_path
                 ipa_model.name = prop['name']
                 ipa_model.app_version = prop['app_version']
                 ipa_model.save()
+
+                # plist for downloading
+                head, ipa_filename = os.path.split(ipa_path)
+                ipa_url = "{}/static/{}.plist".format(
+                    request.build_absolute_uri('/')[:-1],
+                    ipa_filename)
+                writer = PlistWriter(ipa_path, prop, ipa_url)
+                writer.write()
+
+
             except Exception as e:
                 traceback.print_exc()
                 return HttpResponseServerError(

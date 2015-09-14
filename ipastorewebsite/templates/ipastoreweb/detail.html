@@ -3,4 +3,7 @@
 <span>Version : {{ ipa.app_version }}</span> <br/>
 <span>Published At : {{ ipa.pub_date }}</span> <br/>
 <span>Downloaded : {{ ipa.download_count }} times.</span> <br/>
-<span><a href="/ipa-store/{{ ipa.id }}/download">Install This App</a></span>
+
+<span><a href="itms-services://?action=download-manifesturl={{ ipa_url }}.plist">{{ ipa_url }} Kur</a>
+<br/>
+<a href="itms-services://?action=download-manifest&url=http://192.168.1.105:8000/static/1E44F2.ipa.plist">Indir</a>

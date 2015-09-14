@@ -15,6 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+import os
+
+ROOT_PATH = os.path.dirname(__file__)
+STATIC_ROOT = os.path.join(ROOT_PATH, '../static')
 
 urlpatterns = [
     # ipastoreweb url patterns
@@ -31,4 +35,7 @@ urlpatterns = [
 
     # admin url patterns
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^static/(?P<path>.*)$',
+        'django.views.static.serve',
+        {'document_root': STATIC_ROOT}),
 ]
