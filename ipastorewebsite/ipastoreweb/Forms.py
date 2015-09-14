@@ -13,4 +13,4 @@ class IpaUploadForm(ModelForm):
 
     class Meta:
         model = Ipa
-        fields = ['name', ]
+        fields = []
