@@ -60,3 +60,4 @@ target/
 .idea/
 !*.gitkeep/
 *.ipa
+*.plist
